@@ -61,9 +61,9 @@ def action():
 	except:
 		pass
 
-	tag_id		= cookie_and_query( "tag_id",         9999,      query, cookies )
-	demo_id		= cookie_and_query( "demo_id",    "demo10",      query, cookies )
-	user_name	= cookie_and_query( "user_name",     "none",     query, cookies )
+	tag_id		= cookie_and_query( "tag_id",      9999, query, cookies )
+	demo_id		= cookie_and_query( "demo_id",   "none", query, cookies )
+	user_name	= cookie_and_query( "user_name", "none", query, cookies )
 	
 	if tag_id not in visitors.keys():
 		visitors[ tag_id ]	= Visitor( tag_id )
@@ -89,8 +89,9 @@ def action():
 	print( "Content-Type: text/html\n" )
 	
 	h	= html_source.replace( '===TAG_ID===', str( tag_id ) )
-	h	= h.replace( '===DEMO_LIST===', demo_list( demo_id, 18 ) )
+	h	= h.replace( '===DEMO_LIST===', demo_list( demo_id, 30 ) )
 	h	= h.replace( '===USER_NAME===', user_name )
+	h	= h.replace( '===DEMO_ID===', demo_id )
 	h	= h.replace( '===JOB_TYPE===', visitor.job_type )
 	h	= h.replace( '===PRODUCT===', visitor.product )
 	h	= h.replace( '===DEBUG_INFO===', cookies.output() + "<br>" + f"{query}" )

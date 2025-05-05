@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechDay Data Logger</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            padding: 1rem;
+        }
+        section {
+            background-color: white;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        input, select, button {
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            background-color: #007BFF;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+		input[type=range][orient="vertical"] {
+            -webkit-appearance: slider-vertical;
+            width: 8px;
+            height: 90px;
+            padding: 0 5px;
+			
+			outline: none;
+			background: #E0E0E0;
+			border-radius: 10px;
+			border: solid 3px #C0C0C0;
+        }
+		input[type="range"]::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			background: #707070;
+			width: 20px;
+			height: 20px;
+			border-radius: 50%;
+			box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.15);
+		}
+		input[type="range"]:active::-webkit-slider-thumb {
+			box-shadow: 0px 5px 10px -2px rgba(0, 0, 0, 0.3);
+		}
+        @media (max-width: 600px) {
+            main {
+                padding: 0.5rem;
+            }
+            section {
+                padding: 0.5rem;
+            }
+            input, select, button {
+                padding: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+            button {
+                padding: 0.5rem;
+            }
+        }
+		
+		
+		#main-input {
+			
+		}
+		#demo-info {
+			display:none;
+		}
+		#visitor-info {
+			display:none;
+		}
+
+		table {
+			margin: 5px 0;
+			border-collapse: separate; /* セル間にスペースを確保する */
+			border-spacing: 10px;      /* 各セルの間に 10px のスペースを追加 */
+		}
+		
+		table td {
+			vertical-align: top;
+		}
+		
+	</style>	
+</head>
+<body>
+    <header>
+        <h1>TechDay Data Logger</h1>
+    </header>
+    <main>
+		<section id="debug-info">
+			debug info: ===DEBUG_INFO===
+			<br />
+		</section>
+
+		<section id="tag-info">
+            Tag ID: ===TAG_ID===
+            <br />
+            <img src====IMAGE_FILE=== style="width: 90%;" alt="Image"><br />
+            職種：===JOB_TYPE===<br />
+            担当製品：===PRODUCT===
+        </section>
+		
+		<section id="main-input">
+        	<form id="data-form">
+				<input id="tag_id" name="tag_id" type="hidden" value="===TAG_ID==="/>
+                <div style="display: flex; align-items: center;">
+                    <label for="chance">採用可能性: <span id="chance-txt">無</span></label><br />
+                    <input type="range" id="chance" name="chance" min="0" max="3" value="0" orient="vertical" style="margin-right: 20px;" onchange = "sliderVal( this )">
+                    <label for="interest" style="margin-left: 20px;">技術的関心: <span id="interest-txt">無</span></label>
+                    <input type="range" id="interest" name="interest" min="0" max="3" value="0" orient="vertical" onchange = "sliderVal( this )">
+                </div>
+                <div>
+                    <label>周辺部品ソケット:</label><br>
+					
+					<table>
+						<tr>
+							<td>
+								<input type="radio" id="peripheral1" name="peripheralGroup" value="yes">
+							</td>
+							<td>
+								<label for="peripheral1">あり</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="radio" id="peripheral2" name="peripheralGroup" value="no" checked>
+							</td>
+							<td>
+								<label for="peripheral2">なし</label>
+							</td>
+						</tr>
+					</table>	
+					<!---
+                    <input type="radio" id="peripheral1" name="peripheralGroup" value="yes">
+                    <label for="peripheral1">あり</label>
+                    <input type="radio" id="peripheral2" name="peripheralGroup" value="no">
+                    <label for="peripheral2">なし</label><br>
+					-->
+                </div>
+
+				<script>
+					function sliderVal( obj ) {
+						let	list	= [ "無", "小", "中", "大" ];
+						document.getElementById( obj.name + "-txt" ).innerText = list[ obj.value ];
+					}
+				</script>			
+
+				
+				<label for="options">Choose an option:</label>
+                <select id="options" name="options">
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                    <option value="option3">Option 3</option>
+                </select>
+                <div>
+                    <label>AR:</label><br>
+					<table>
+						<tr>
+							<td>
+								<input type="checkbox" id="別途デモ実施" name="別途デモ実施">
+							</td>
+							<td>
+								<label for="checkbox1">別途デモ実施</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" id="ハンズオン実施" name="ハンズオン実施">
+							</td>
+							<td>
+								<label for="checkbox1">ハンズオン実施</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" id="技術セミナ開催" name="技術セミナ開催">
+							</td>
+							<td>
+								<label for="checkbox1">技術セミナ開催</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" id="資料送付" name="資料送付">
+							</td>
+							<td>
+								<label for="checkbox2">資料送付</label>
+							</td>
+						</tr>			
+						<tr>
+							<td>
+								<input type="checkbox" id="価格情報提供" name="価格情報提供">
+							</td>
+							<td>
+								<label for="checkbox3">価格情報提供</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" id="面談" name="面談">
+							</td>
+							<td>
+								<label for="checkbox4">面談</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								
+								<input type="checkbox" id="checkbox5" name="checkbox5">
+							</td>
+							<td>
+								<label for="checkbox5">Checkbox 5</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" id="checkbox6" name="checkbox6">
+							</td>
+							<td>
+								<label for="checkbox6">Checkbox 6</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" id="checkbox7" name="checkbox7">
+							</td>
+							<td>
+								<label for="checkbox7">Checkbox 7</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" id="checkbox8" name="checkbox8">
+							</td>
+							<td>
+								<label for="checkbox8">Checkbox 8</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" id="checkbox9" name="checkbox9">
+							</td>
+							<td>
+								<label for="checkbox9">Checkbox 9</label>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" id="checkbox10" name="checkbox10">
+							</td>
+							<td>
+								<label for="checkbox10">Checkbox 10</label>
+							</td>
+						</tr>
+					</table>
+					<!---	
+					
+                    <label for="checkbox1">別途デモ実施</label><br>
+                    <input type="checkbox" id="ハンズオン実施" name="ハンズオン実施">
+                    <label for="checkbox1">ハンズオン実施</label><br>
+                    <input type="checkbox" id="技術セミナ開催" name="技術セミナ開催">
+                    <label for="checkbox1">技術セミナ開催</label><br>
+                    <input type="checkbox" id="資料送付" name="資料送付">
+                    <label for="checkbox2">資料送付</label><br>
+                    <input type="checkbox" id="価格情報提供" name="価格情報提供">
+                    <label for="checkbox3">価格情報提供</label><br>
+                    <input type="checkbox" id="面談" name="面談">
+                    <label for="checkbox4">面談</label><br>
+                    <input type="checkbox" id="checkbox5" name="checkbox5">
+                    <label for="checkbox5">Checkbox 5</label><br>
+                    <input type="checkbox" id="checkbox6" name="checkbox6">
+                    <label for="checkbox6">Checkbox 6</label><br>
+                    <input type="checkbox" id="checkbox7" name="checkbox7">
+                    <label for="checkbox7">Checkbox 7</label><br>
+                    <input type="checkbox" id="checkbox8" name="checkbox8">
+                    <label for="checkbox8">Checkbox 8</label><br>
+                    <input type="checkbox" id="checkbox9" name="checkbox9">
+                    <label for="checkbox9">Checkbox 9</label><br>
+                    <input type="checkbox" id="checkbox10" name="checkbox10">
+                    <label for="checkbox10">Checkbox 10</label><br>
+					-->
+                </div>
+                <label for="data-input">メモ:</label>
+                <textarea id="data-input" name="data-input" rows="4" cols="50"></textarea><br />
+                <button type="submit">送信</button>
+			</form>
+		</section>
+		
+		<section id="demo-info">
+			<form id="user-data">
+				<label for="demo_id">担当デモ選択:</label>
+				<select id="options" name="demo_id">
+					===DEMO_LIST===
+				</select>
+				<br />
+
+				<label for="user_name">担当者名:</label>
+				<input id="user_name" name="user_name" value="===USER_NAME==="/>
+				</select>
+				<br />
+				<button type="submit">設定</button>
+			</form>
+		</section>
+		
+		<section id="visitor-info">
+			<form id="tag-update">
+				<label for="job_type">Tag ID:</label>
+				<input id="tag_id" name="tag_id" type="number" value="===TAG_ID==="/ readonly>
+				<br />
+
+				<label for="job_type">職種:</label>
+				<input id="job_type" name="job_type" value="===JOB_TYPE==="/>
+				<br />
+
+				<label for="product">担当製品:</label>
+				<input id="product" name="product" value="===PRODUCT==="/>
+				<br />
+				<button type="submit">設定</button>
+			</form>
+		</section>
+
+		<section id="view-controls">
+			<label for="view-option">画面表示オプション</label>
+			<select id="view-option" onchange = "viewControl( this.value )">
+				<option value="main-input" selected>説明員入力</option>
+				<option value="demo-info"          >デモ担当者設定</option>
+				<option value="visitor-info"       >タグ設定</option>
+			</select>
+			<script>
+				function viewControl( selected_item ) {
+					let	list	= [ "main-input", "demo-info", "visitor-info" ];
+					
+					list.forEach( ( item ) => {
+						let element = document.getElementById( item );
+						
+						if ( item == selected_item ) {
+							element.style.display = 'block';
+						} else {
+							element.style.display = 'none';
+						}						
+					} )
+					
+					let	tag_info	= document.getElementById( "tag-info" );
+					
+					if ( "demo-info" == selected_item ) {
+						tag_info.style.display = 'none';
+					} else {
+						tag_info.style.display = 'block';
+					}
+				}
+			</script>			
+		</section>
+	</main>
+<!--
+	<footer>
+        &copy; 2023 TechDay Data Logger
+    </footer>
+-->
+</body>
+</html>
+

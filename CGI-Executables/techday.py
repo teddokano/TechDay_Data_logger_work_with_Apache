@@ -15,9 +15,9 @@ import cgi
 
 page_template_path		= "page_template/main_page.html"
 error404_template_path	= "page_template/404.html"
-image_folder			= "/img"
-image_folder_access		= "../Documents/img"
-default_image			= f"{image_folder}/default.png"
+image_folder			= "/img/"
+image_folder_access		= "../Documents/img/"
+default_image			= f"{image_folder}default.png"
 visitors_data_file		= "data/visitors.pkl"
 access_log_folder		= "access_log/"
 
@@ -106,19 +106,23 @@ def action():
 	h	= h.replace( '===DEMO_ID===',    demo_id )
 	h	= h.replace( '===JOB_TYPE===',   visitor.job_type )
 	h	= h.replace( '===PRODUCT===',    visitor.product )
-	h	= h.replace( '===DEBUG_INFO===', cookies.output() + "<br />" + f"{query}" + "<br />" + f"{os.environ}" + "<br />" +  f"{remote_addr}"  )
 
-	image_file	= f"{image_folder_access}/{tag_id}.jpg"
-	if not os.path.isfile( image_file ):
+	image_file	= f"{image_folder_access}{tag_id}.jpg"
+	
+	if os.path.isfile( image_file ):
+		image_file	= f"{image_folder}{tag_id}.jpg"
+	else:	
 		image_file	= default_image
 		
-	h	= h.replace( '===IMAGE_FILE===', f"{image_folder}/{tag_id}.jpg" )
+	h	= h.replace( '===IMAGE_FILE===', image_file )
 	
 	if new_tag:
 		h	= h.replace( '===DISPLAY_CONTROL===', "newTag" )
 	else:
 		h	= h.replace( '===DISPLAY_CONTROL===', "isFirstAccess" )
 	
+	h	= h.replace( '===DEBUG_INFO===', cookies.output() + "<br />" + f"{query}" + "<br />" + f"{os.environ}" + "<br />" +  f"{remote_addr}"  + "<br />" +  f"{image_file}" + "<br />" +  f"{default_image}" + "<br />" +  f"{tag_id}"  )
+
 	print( h )
 	
 	try:

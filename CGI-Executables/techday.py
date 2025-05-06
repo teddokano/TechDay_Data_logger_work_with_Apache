@@ -2,7 +2,7 @@
 
 import urllib.request
 import json
-import	os
+import os
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
 from http.cookies import SimpleCookie
@@ -24,10 +24,11 @@ access_log_folder	= "access_log/"
 access_log			= []
 
 class Access:
-    def __init__( self, query, time, ip_addr ):
+    def __init__( self, query, time, user_name, demo_id ):
         self.query		= query
         self.time		= time
-        self.ip_addr	= ip_addr
+        self.user_name	= user_name
+        self.demo_id	= demo_id
 
 class Visitor:
 	def __init__( self, id, job = "未設定", prod = "未設定" ):
@@ -52,15 +53,8 @@ def action():
 	except:
 		pass
 			
-	query	= parse_qs( os.environ['QUERY_STRING'] )
-
-	try:
-		with open( access_log_folder + datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f.log"), "wb" ) as f:
-			pickle.dump( Access( query, datetime.datetime.now(), self.client_address[0] ), f )
-			
-	except:
-		pass
-
+	query	= parse_qs( os.environ[ "QUERY_STRING" ] )
+	
 	tag_id		= cookie_and_query( "tag_id",      9999, query, cookies )
 	demo_id		= cookie_and_query( "demo_id",   "none", query, cookies )
 	user_name	= cookie_and_query( "user_name", "none", query, cookies )
@@ -94,7 +88,7 @@ def action():
 	h	= h.replace( '===DEMO_ID===', demo_id )
 	h	= h.replace( '===JOB_TYPE===', visitor.job_type )
 	h	= h.replace( '===PRODUCT===', visitor.product )
-	h	= h.replace( '===DEBUG_INFO===', cookies.output() + "<br>" + f"{query}" )
+	h	= h.replace( '===DEBUG_INFO===', cookies.output() + "<br>" + f"{query}" + f"{os.environ}" )
 
 	image_file	= f"{image_folder}/{tag_id}.jpg"
 	if not os.path.isfile( image_file ):
@@ -103,6 +97,12 @@ def action():
 	h	= h.replace( '===IMAGE_FILE===', image_file )
 
 	print( h )
+	
+	try:
+		with open( access_log_folder + datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f") + "_" + user_name + "_" + demo_id + ".log", "wb" ) as f:
+			pickle.dump( Access( query, datetime.datetime.now(), user_name, demo_id ), f )			
+	except:
+		raise Exception( "########## access loggging error" )
 
 def cookie_and_query( key, default_value, q, c ):
 	try:

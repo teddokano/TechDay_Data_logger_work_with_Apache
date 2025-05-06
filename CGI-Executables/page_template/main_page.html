@@ -130,11 +130,13 @@
         <h1>TechDay Data Logger</h1>
     </header>
     <main>
+		<!--
 		<section id="debug-info">
 			debug info: ===DEBUG_INFO===
 			<br />
 		</section>
-
+		-->
+		
 		<section id="tag-info">
             Tag ID: ===TAG_ID===
             <br />
@@ -328,7 +330,7 @@
                 <button type="submit">送信</button>
 				
 				<div>
-					投稿者情報: ===USER_NAME=== @ ===DEMO_ID===
+					担当者情報: ===USER_NAME=== @ ===DEMO_ID===
 				</div>
 			</form>
 		</section>
@@ -395,6 +397,30 @@
 						tag_info.style.display = 'block';
 					}
 				}
+				
+				function listingCookie() {
+					let uninit		= false;
+					let cookieList	= document.cookie.split(';');
+					
+					cookieList.forEach( (cookie) => {
+						let [ key, value ] = cookie.split( '=' );
+						
+						if ( key.trim() == "user_name" || key.trim() == "demo_id" ) {
+							if ( value == "none" ) {
+								uninit = true;										
+							}
+						}
+					});
+
+					if ( uninit ) {
+						document.getElementById( "tag-info"     ).style.display = 'none';	
+						document.getElementById( "main-input"   ).style.display = 'none';
+						document.getElementById( "demo-info"    ).style.display = 'block';
+						document.getElementById( "visitor-info" ).style.display = 'none';
+					}
+				}
+				
+				window.addEventListener( 'load', listingCookie );
 			</script>			
 		</section>
 	</main>

@@ -356,8 +356,14 @@
 
 				<label for="product">担当製品:</label>
 				<input id="product" name="product" value="===PRODUCT==="/>
+				<br />				
+			</form>
+
+			<form action="upload.py" method="post" enctype="multipart/form-data">
+				<input type="file" id="environment" capture="environment" accept="image/*" name="image">
 				<br />
-				<button type="submit">設定</button>
+
+				<button type="submit">アップロード</button>
 			</form>
 		</section>
 

@@ -13,6 +13,7 @@ import	datetime
 page_template_path		= "page_template/main_page.html"
 error404_template_path	= "page_template/404.html"
 image_folder			= "/img"
+image_folder_access		= "../Documents/img"
 default_image			= f"{image_folder}/default.png"
 visitors_data_file		= "data/visitors.pkl"
 access_log_folder		= "access_log/"
@@ -104,11 +105,11 @@ def action():
 	h	= h.replace( '===PRODUCT===', visitor.product )
 	h	= h.replace( '===DEBUG_INFO===', cookies.output() + "<br />" + f"{query}" + "<br />" + f"{os.environ}" + "<br />" +  f"{remote_addr}"  )
 
-	image_file	= f"{image_folder}/{tag_id}.jpg"
+	image_file	= f"{image_folder_access}/{tag_id}.jpg"
 	if not os.path.isfile( image_file ):
 		image_file	= default_image
 		
-	h	= h.replace( '===IMAGE_FILE===', image_file )
+	h	= h.replace( '===IMAGE_FILE===', f"{image_folder}/{tag_id}.jpg" )
 	
 	if new_tag:
 		h	= h.replace( '===DISPLAY_CONTROL===', "newTag" )

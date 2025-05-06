@@ -419,7 +419,12 @@
 					document.getElementById( "debug-info"   ).style.display = 'none';
 				}
 								
-				window.addEventListener( 'load', isFirstAccess );
+				function newTag() {
+					viewControl( "visitor-info" );
+				}
+				
+				//window.addEventListener( 'load', isFirstAccess );
+				window.addEventListener( 'load', ===DISPLAY_CONTROL=== );
 			</script>			
 		</section>
 	</main>

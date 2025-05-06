@@ -59,8 +59,11 @@ def action():
 	demo_id		= cookie_and_query( "demo_id",   "none", query, cookies )
 	user_name	= cookie_and_query( "user_name", "none", query, cookies )
 	
+	new_tag		= False
+	
 	if tag_id not in visitors.keys():
 		visitors[ tag_id ]	= Visitor( tag_id )
+		new_tag				= True
 
 	visitor	= visitors[ tag_id ]
 
@@ -106,7 +109,12 @@ def action():
 		image_file	= default_image
 		
 	h	= h.replace( '===IMAGE_FILE===', image_file )
-
+	
+	if new_tag:
+		h	= h.replace( '===DISPLAY_CONTROL===', "newTag" )
+	else:
+		h	= h.replace( '===DISPLAY_CONTROL===', "isFirstAccess" )
+	
 	print( h )
 	
 	try:

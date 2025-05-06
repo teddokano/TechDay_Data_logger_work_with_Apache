@@ -14,14 +14,8 @@ page_template_path		= "page_template/main_page.html"
 error404_template_path	= "page_template/404.html"
 image_folder			= "/img"
 default_image			= f"{image_folder}/default.png"
-verbose					= True
-
 visitors_data_file		= "data/visitors.pkl"
-
-PORT = 8000
-
-access_log_folder	= "access_log/"
-access_log			= []
+access_log_folder		= "access_log/"
 
 class Access:
     def __init__( self, query, time, user_name, demo_id ):
@@ -53,9 +47,12 @@ def action():
 	except:
 		pass
 			
-	query	= parse_qs( os.environ[ "QUERY_STRING" ] )
+	try:
+		query	= parse_qs( os.environ[ "QUERY_STRING" ] )
+	except:
+		pass
 	
-	tag_id		= cookie_and_query( "tag_id",      9999, query, cookies )
+	tag_id		= cookie_and_query( "tag_id",    9999,   query, cookies )
 	demo_id		= cookie_and_query( "demo_id",   "none", query, cookies )
 	user_name	= cookie_and_query( "user_name", "none", query, cookies )
 	
@@ -64,16 +61,27 @@ def action():
 
 	visitor	= visitors[ tag_id ]
 
+	visitor_update	= False
+
 	try:
 		visitor.job_type	= query[ "job_type" ][0]
-		visitor.product		= query[ "product"  ][0]
-		
-		with open( visitors_data_file, "wb" ) as f:
-			pickle.dump( visitors, f )
-			
+		visitor_update		= True
 	except:
 		pass
-
+		
+	try:
+		visitor.product		= query[ "product"  ][0]
+		visitor_update		= True
+	except:
+		pass
+		
+	if 	visitor_update:
+		try:
+			with open( visitors_data_file, "wb" ) as f:
+				pickle.dump( visitors, f )
+		except:
+			raise Exception( "########## vistors data saving error" )
+		
 	cookie_expire_seconds	= 3600 * 24 * 3
 	cookies[ "tag_id"    ][ "max-age" ] = cookie_expire_seconds
 	cookies[ "demo_id"   ][ "max-age" ] = cookie_expire_seconds

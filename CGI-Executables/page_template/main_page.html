@@ -130,13 +130,6 @@
         <h1>TechDay Data Logger</h1>
     </header>
     <main>
-		<!--
-		<section id="debug-info">
-			debug info: ===DEBUG_INFO===
-			<br />
-		</section>
-		-->
-		
 		<section id="tag-info">
             Tag ID: ===TAG_ID===
             <br />
@@ -368,16 +361,23 @@
 			</form>
 		</section>
 
+		<section id="debug-info">
+			debug info: <br />
+			===DEBUG_INFO===
+			<br />
+		</section>
+		
 		<section id="view-controls">
 			<label for="view-option">画面表示オプション</label>
 			<select id="view-option" onchange = "viewControl( this.value )">
-				<option value="main-input" selected>説明員入力</option>
-				<option value="demo-info"          >デモ担当者設定</option>
-				<option value="visitor-info"       >タグ設定</option>
+				<option value="main-input"   selected>説明員入力</option>
+				<option value="demo-info"            >デモ担当者設定</option>
+				<option value="visitor-info"         >タグ設定</option>
+				<option value="debug-info"           >デバッグ情報</option>
 			</select>
 			<script>
 				function viewControl( selected_item ) {
-					let	list	= [ "main-input", "demo-info", "visitor-info" ];
+					let	list	= [ "main-input", "demo-info", "visitor-info", "debug-info" ];
 					
 					list.forEach( ( item ) => {
 						let element = document.getElementById( item );
@@ -398,14 +398,14 @@
 					}
 				}
 				
-				function listingCookie() {
+				function isFirstAccess() {
 					let uninit		= false;
 					let cookieList	= document.cookie.split(';');
 					
 					cookieList.forEach( (cookie) => {
 						let [ key, value ] = cookie.split( '=' );
 						
-						if ( key.trim() == "user_name" || key.trim() == "demo_id" ) {
+						if ( (key.trim() == "user_name") || (key.trim() == "demo_id") ) {
 							if ( value == "none" ) {
 								uninit = true;										
 							}
@@ -413,14 +413,13 @@
 					});
 
 					if ( uninit ) {
-						document.getElementById( "tag-info"     ).style.display = 'none';	
-						document.getElementById( "main-input"   ).style.display = 'none';
-						document.getElementById( "demo-info"    ).style.display = 'block';
-						document.getElementById( "visitor-info" ).style.display = 'none';
+						viewControl( "demo-info" );
 					}
+					
+					document.getElementById( "debug-info"   ).style.display = 'none';
 				}
-				
-				window.addEventListener( 'load', listingCookie );
+								
+				window.addEventListener( 'load', isFirstAccess );
 			</script>			
 		</section>
 	</main>

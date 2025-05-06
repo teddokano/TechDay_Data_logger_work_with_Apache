@@ -18,11 +18,12 @@ visitors_data_file		= "data/visitors.pkl"
 access_log_folder		= "access_log/"
 
 class Access:
-    def __init__( self, query, time, user_name, demo_id ):
+    def __init__( self, query, time, user_name, demo_id, ip_addr ):
         self.query		= query
         self.time		= time
         self.user_name	= user_name
         self.demo_id	= demo_id
+        self.ip_addr	= ip_addr
 
 class Visitor:
 	def __init__( self, id, job = "未設定", prod = "未設定" ):
@@ -51,6 +52,8 @@ def action():
 		query	= parse_qs( os.environ[ "QUERY_STRING" ] )
 	except:
 		pass
+		
+	remote_addr	= os.environ[ "REMOTE_ADDR" ]
 	
 	tag_id		= cookie_and_query( "tag_id",    9999,   query, cookies )
 	demo_id		= cookie_and_query( "demo_id",   "none", query, cookies )
@@ -96,7 +99,7 @@ def action():
 	h	= h.replace( '===DEMO_ID===', demo_id )
 	h	= h.replace( '===JOB_TYPE===', visitor.job_type )
 	h	= h.replace( '===PRODUCT===', visitor.product )
-	h	= h.replace( '===DEBUG_INFO===', cookies.output() + "<br>" + f"{query}" + f"{os.environ}" )
+	h	= h.replace( '===DEBUG_INFO===', cookies.output() + "<br />" + f"{query}" + "<br />" + f"{os.environ}" + "<br />" +  f"{remote_addr}"  )
 
 	image_file	= f"{image_folder}/{tag_id}.jpg"
 	if not os.path.isfile( image_file ):
@@ -108,7 +111,7 @@ def action():
 	
 	try:
 		with open( access_log_folder + datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f") + "_" + user_name + "_" + demo_id + ".log", "wb" ) as f:
-			pickle.dump( Access( query, datetime.datetime.now(), user_name, demo_id ), f )			
+			pickle.dump( Access( query, datetime.datetime.now(), user_name, demo_id, remote_addr ), f )			
 	except:
 		raise Exception( "########## access loggging error" )
 

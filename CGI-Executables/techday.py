@@ -101,11 +101,11 @@ def action():
 	print( "Content-Type: text/html\n" )
 	
 	h	= html_source.replace( '===TAG_ID===', str( tag_id ) )
-	h	= h.replace( '===DEMO_LIST===', demo_list( demo_id, 30 ) )
-	h	= h.replace( '===USER_NAME===', user_name )
-	h	= h.replace( '===DEMO_ID===', demo_id )
-	h	= h.replace( '===JOB_TYPE===', visitor.job_type )
-	h	= h.replace( '===PRODUCT===', visitor.product )
+	h	= h.replace( '===DEMO_LIST===',  demo_list( demo_id, 30 ) )
+	h	= h.replace( '===USER_NAME===',  user_name )
+	h	= h.replace( '===DEMO_ID===',    demo_id )
+	h	= h.replace( '===JOB_TYPE===',   visitor.job_type )
+	h	= h.replace( '===PRODUCT===',    visitor.product )
 	h	= h.replace( '===DEBUG_INFO===', cookies.output() + "<br />" + f"{query}" + "<br />" + f"{os.environ}" + "<br />" +  f"{remote_addr}"  )
 
 	image_file	= f"{image_folder_access}/{tag_id}.jpg"

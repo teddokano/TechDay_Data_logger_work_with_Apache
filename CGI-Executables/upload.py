@@ -1,59 +1,45 @@
 #!/usr/bin/env python3
 
-import os    # 既存ファイルの有無を確認するため
-import sys    # exit()するため
-import cgi    # CGIのデータを扱うため
-import cgitb    # CGIのデバッグのため
-
-path	= "./"    # アップロードされたファイルを保存するディレクトリ
-MEGA = 1048576    # 一度にアップロードするデータサイズ
-
-def print_header():    # HTMLヘッダを出力
-  print('Content-Type: text/html')
-  print('')
-  print('<!DOCTYPE html>')
-  print('')
-  print('<html lang="ja">')
-  print('')
-  print('<head>')
-  print('  <meta charset="UTF-8">')
-  print('  <meta name="description" content="file upload">')
-  print('  <meta name="keywords" content="upload">')
-  print('  <title>File upload</title>')
-  print('</head>')
-  print('')
-  print('<body>')
+import os
+import cgi
+from urllib.parse import parse_qs
 
 
-def print_footer():    # HTMLフッタを出力しCGIを終了
-  print('</body>')
-  print('')
-  print('</html>')
-  sys.exit(0)
+page_template_path		= "page_template/upload_page.html"
+upload_path				= "../Documents/img/"
 
+MEGA		= 1048576
 
-cgi.maxlen = 400000000    # 受け付ける最大のデータサイズを制限
-cgitb.enable()    # デバッグ目的で使用するcgitbを有効に
+try:
+	query	= parse_qs( os.environ[ "QUERY_STRING" ] )
+except:
+	pass
 
-print_header()    # ヘッダを出力
+try:
+	tag_id	= query[ "tag_id" ][ 0 ]
+except:
+	tag_id	= "Unknown_image"
 
-form_data = cgi.FieldStorage()    # HTMLのフォームからデータを受け取る準備
+with open( page_template_path, "r" ) as f:
+	html_source 	= f.read()					
 
-file_name = "AAA.png"    # ファイル名を取得
-full_path = path + file_name    # ファイル名にパスを付加
+cgi.maxlen	= 400_000_000
+form_data	= cgi.FieldStorage()
+file_name	= f"{tag_id}.jpg"
+full_path	= upload_path + file_name
 
-uploaded_file = open( full_path, 'wb' )    # アップロードされたデータを保存する新規ファイルを同名で作成
-item = form_data['image']
+with open( full_path, "wb" ) as uploaded_file:
+	item = form_data[ "image" ]
 
-while True:
-	chunk = item.file.read(MEGA)
-	
-	if not chunk:
-		break
-	
-	uploaded_file.write(chunk)
+	while True:
+		chunk = item.file.read( MEGA )
+		
+		if not chunk:
+			break
+		
+		uploaded_file.write( chunk )
 
-uploaded_file.close()
-print(file_name + ' has just been uploaded.<br>')    # アップロードされたことを表示
+h	= html_source.replace( '===TAG_ID===', str( tag_id ) )
 
-print_footer()    # HTMLフッタを表示して終了
+print( "Content-Type: text/html\n" )
+print( h )

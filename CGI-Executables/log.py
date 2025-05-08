@@ -79,6 +79,8 @@ h	= h.replace( "===LOG_TABLE===",  total_log.to_html() )
 
 if demo_id == "all demo_id":
 	h	= h.replace( "===DOWNLOAD_LINK===", '<p><a href = "/log.xlsx">Download log file</a></p>' )
+else:
+	h	= h.replace( "===DOWNLOAD_LINK===", "" )
 
 print( h )
 

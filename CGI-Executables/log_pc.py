@@ -99,6 +99,8 @@ h	= h.replace( "===LOG_TABLE===",  scripts + total_log.to_html( classes = "my-ta
 
 if demo_id == "all demo_id":
 	h	= h.replace( "===DOWNLOAD_LINK===", '<p><a href = "/log.xlsx">Download log file</a></p>' )
+else:
+	h	= h.replace( "===DOWNLOAD_LINK===", "" )
 
 print( h )
 

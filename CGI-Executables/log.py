@@ -6,8 +6,9 @@ import	pandas as pd
 import	openpyxl
 import	pickle
 
-page_template_path		= "page_template/log_page.html"
+page_template_path	= "page_template/log_page.html"
 access_log_folder	= "access_log/"
+excel_output_file	= "../Documents/log.xlsx"
 
 with open( page_template_path, "r" ) as f:
 	html_source 	= f.read()					
@@ -19,7 +20,6 @@ class Access:
 		self.user_name	= user_name
 		self.demo_id	= demo_id
 		self.ip_addr	= ip_addr
-
 
 files		= os.listdir( access_log_folder )
 log_files	= [ f for f in files if f.endswith( ".log" ) == True ]
@@ -45,7 +45,7 @@ for i in logs:
 	total_log	= pd.concat( [total_log, pd.DataFrame( d ) ] )
 
 total_log.fillna( "", inplace = True )
-total_log.to_excel('pandas_to_excel.xlsx', sheet_name='new_sheet_name')
+total_log.to_excel( excel_output_file, sheet_name='new_sheet_name')
 	
 print( "Content-Type: text/html\n" )
 h	= html_source.replace( '===LOG_TABLE===', total_log.to_html() )

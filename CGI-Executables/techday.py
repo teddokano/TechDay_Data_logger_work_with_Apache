@@ -10,9 +10,6 @@ from http.cookies import SimpleCookie
 import	pickle
 import	datetime
 
-import cgi
-
-
 page_template_path		= "page_template/main_page.html"
 error404_template_path	= "page_template/404.html"
 image_folder			= "/img/"

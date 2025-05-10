@@ -28,18 +28,23 @@ form_data	= cgi.FieldStorage()
 file_name	= f"{tag_id}.jpg"
 full_path	= upload_path + file_name
 
-with open( full_path, "wb" ) as uploaded_file:
-	item = form_data[ "image" ]
+item		= form_data[ "image" ]
 
-	while True:
-		chunk = item.file.read( MEGA )
-		
-		if not chunk:
-			break
-		
-		uploaded_file.write( chunk )
+if item.filename == "":
+	h	= html_source.replace( "upload completed for tag_id = ===TAG_ID===", "No file uploaded" )
+	h	= html_source.replace( "===TAG_ID===", str( tag_id ) )
 
-h	= html_source.replace( '===TAG_ID===', str( tag_id ) )
+else:
+	with open( full_path, "wb" ) as uploaded_file:
+		while True:
+			chunk = item.file.read( MEGA )
+			
+			if not chunk:
+				break
+			
+			uploaded_file.write( chunk )
+
+	h	= html_source.replace( "===TAG_ID===", str( tag_id ) )
 
 print( "Content-Type: text/html\n" )
 print( h )

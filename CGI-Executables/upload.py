@@ -8,7 +8,7 @@ from urllib.parse import parse_qs
 page_template_path		= "page_template/upload_page.html"
 upload_path				= "../Documents/img/"
 
-MEGA		= 1048576
+MEGA		= 2**20
 
 try:
 	query	= parse_qs( os.environ[ "QUERY_STRING" ] )

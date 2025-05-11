@@ -8,6 +8,8 @@ import	pickle
 from	urllib.parse import parse_qs
 from	http.cookies import SimpleCookie
 
+from log import get_log_data
+
 page_template_path	= "page_template/log_page.html"
 visitors_data_file	= "data/visitors.pkl"
 access_log_folder	= "access_log/"
@@ -48,19 +50,8 @@ class Visitor:
 	def __init__( self, id, job = "未設定", prod = "未設定" ):
 		self.job_type	= job
 		self.product	= prod
-		
-files		= os.listdir( access_log_folder )
-log_files	= [ f for f in files if f.endswith( ".log" ) == True ]
 
-logs		= []
-
-for f in log_files:
-	try:
-		print( f"loading: {f}  ", end = "" )
-		with open( access_log_folder + f, "rb" ) as file:
-			logs.append( pickle.load( file ) )
-	except:
-		pass
+log_data	= get_log_data()
 
 try:
 	with open( visitors_data_file, "rb" ) as f:

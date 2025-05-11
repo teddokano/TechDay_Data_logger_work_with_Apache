@@ -40,21 +40,15 @@ class Access:
 		self.demo_id	= demo_id
 		self.ip_addr	= ip_addr
 
-def get_log_data():
-	files		= os.listdir( access_log_folder )
-	log_files	= [ f for f in files if f.endswith( ".log" ) == True ]
+def get_log_data( path = access_log_folder ):
+	files		= os.listdir( path )
+	log_files	= [ access_log_folder + f for f in files if f.endswith( ".log" ) == True ]
 
 	logs		= []
-
+	
 	for f in log_files:
-		try:
-			print( f"loading: {f}  ", end = "" )
-			with open( access_log_folder + f, "rb" ) as file:
-				logs.append( pickle.load( file ) )
-
-		except:
-			pass
-
+		with open( f, "rb" ) as file:
+			logs.append( pickle.load( file ) )
 
 	total_log	= pd.DataFrame()
 
@@ -65,9 +59,13 @@ def get_log_data():
 		total_log	= pd.concat( [total_log, pd.DataFrame( d, index = [ 0 ] ) ] )
 
 	total_log.fillna( "", inplace = True )
-	total_log.sort_values( "time", ascending = False, inplace = True )
-	
+#	print( logs )
+#	print(  "done" )
+#	print(  total_log )
 	return total_log
+	
+def test( x ):
+	return x * x
 	
 
 def get_log():
@@ -85,6 +83,7 @@ def get_log():
 	###
 	
 	total_log	= get_log_data()
+	total_log.sort_values( "time", ascending = False, inplace = True )
 
 
 	###

@@ -39,7 +39,6 @@ with open( page_template_path, "r" ) as f:
 
 class Visitor:
 	def __init__( self, id, job = "未設定", prod = "未設定" ):
-		self.tag_id		= id
 		self.job_type	= job
 		self.product	= prod
 		
@@ -64,9 +63,9 @@ except:
 
 total_log	= pd.DataFrame()
 
-for v in visitors.values():
-	d	= { "tag_id": v.tag_id, "job_type": v.job_type, "product": v.product }
-	total_log	= pd.concat( [total_log, pd.DataFrame( d, index = [ v.tag_id ] ) ] )
+for k, v in visitors.items():
+	d	= { "tag_id": k, "job_type": v.job_type, "product": v.product }
+	total_log	= pd.concat( [total_log, pd.DataFrame( d, index = [ k ] ) ] )
 
 total_log.fillna( "", inplace = True )
 total_log.sort_values( "tag_id", ascending = False, inplace = True )

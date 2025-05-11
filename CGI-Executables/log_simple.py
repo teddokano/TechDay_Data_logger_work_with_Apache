@@ -12,25 +12,6 @@ page_template_path	= "page_template/log_page.html"
 access_log_folder	= "access_log/"
 excel_output_file	= "../Documents/log.xlsx"
 
-scripts = """
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css" rel="stylesheet"/>
-    <link href="https://cdn.datatables.net/v/zf/jq-3.6.0/dt-1.13.4/b-2.3.6/b-html5-2.3.6/date-1.4.1/fh-3.3.2/sb-1.4.2/datatables.min.css" rel="stylesheet"/>
- 
-    <script src="https://cdn.datatables.net/v/zf/jq-3.6.0/dt-1.13.4/b-2.3.6/b-html5-2.3.6/date-1.4.1/fh-3.3.2/sb-1.4.2/datatables.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"></script>
-
-    <script>
-        $(document).ready(function() {$('.my-table').DataTable({
-            select: true,
-            displayLength: 25,
-            buttons: ['copy'],
-            fixedHeader: true,
-            dom: 'iQrtBlp',
-        });})
-    </script>
-"""
-# https://qiita.com/TKfumi/items/05fc0208014a83fb8079
-
 with open( page_template_path, "r" ) as f:
 	html_source 	= f.read()					
 
@@ -92,10 +73,9 @@ else:
 	total_log.to_excel( excel_output_file, sheet_name='new_sheet_name')
 	demo_id = "all demo_id"
 	
-	
 print( "Content-Type: text/html\n" )
 h	= html_source.replace( "===DEBUG_INFO===", demo_id )
-h	= h.replace( "===LOG_TABLE===",  scripts + total_log.to_html( classes = "my-table", index = False ) )
+h	= h.replace( "===LOG_TABLE===",  total_log.to_html() )
 
 if demo_id == "all demo_id":
 	h	= h.replace( "===DOWNLOAD_LINK===", '<p><a href = "/log.xlsx">Download log file</a></p>' )

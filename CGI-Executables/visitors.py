@@ -12,6 +12,7 @@ page_template_path	= "page_template/log_page.html"
 visitors_data_file	= "data/visitors.pkl"
 access_log_folder	= "access_log/"
 image_folder_access	= "../Documents/img/"
+image_folder_web	= "/img/"
 excel_output_file	= "../Documents/visitors.xlsx"
 
 
@@ -67,6 +68,8 @@ for k, v in visitors.items():
 	d	= { "tag_id": k, "job_type": v.job_type, "product": v.product }
 	total_log	= pd.concat( [total_log, pd.DataFrame( d, index = [ k ] ) ] )
 
+tags	= [ k for k in visitors.keys() ]
+
 total_log.fillna( "", inplace = True )
 total_log.sort_values( "tag_id", ascending = False, inplace = True )
 
@@ -77,6 +80,9 @@ print( "Content-Type: text/html\n" )
 h	= html_source.replace( "===DEBUG_INFO===", demo_id )
 h	= h.replace( "===LOG_TABLE===",  scripts + total_log.to_html( classes = "my-table", index = False ) )
 h	= h.replace( "===DOWNLOAD_LINK===", '<p><a href = "/visitors.xlsx">Download log file</a></p>' )
+
+for k in tags:
+	h	= h.replace( f"<td>{k}</td>", f"<td><a href = '{image_folder_web}{k}.jpg'>{k}</a></td>" )
 
 print( h )
 

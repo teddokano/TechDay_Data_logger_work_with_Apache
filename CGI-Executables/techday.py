@@ -28,7 +28,7 @@ class Access:
 
 class Visitor:
 	def __init__( self, id, job = "未設定", prod = "未設定" ):
-		self.tag_id		= id
+#		self.tag_id		= id
 		self.job_type	= job
 		self.product	= prod
 		

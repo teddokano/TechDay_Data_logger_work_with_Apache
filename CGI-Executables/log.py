@@ -62,7 +62,7 @@ def get_log_data():
 		d	= { "time": i.time, "user_name": i.user_name, "demo_id": i.demo_id, "ip_addr": i.ip_addr }
 		d.update( i.query )
 		
-		total_log	= pd.concat( [total_log, pd.DataFrame( d ) ] )
+		total_log	= pd.concat( [total_log, pd.DataFrame( d, index = [ 0 ] ) ] )
 
 	total_log.fillna( "", inplace = True )
 	total_log.sort_values( "time", ascending = False, inplace = True )

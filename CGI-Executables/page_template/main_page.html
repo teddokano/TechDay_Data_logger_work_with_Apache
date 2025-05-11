@@ -241,32 +241,34 @@
 		</section>
 		
 		<section id="visitor-info">
-			<form id="tag-update">
-				<label for="tag_id">Tag ID:</label>
-				<input id="tag_id" name="tag_id" type="number" value="===TAG_ID==="/ readonly>
-				<br />
+			<section id="visitor-info-basic">
+				<form id="tag-update">
+					<label for="tag_id">Tag ID:</label>
+					<input id="tag_id" name="tag_id" type="number" value="===TAG_ID==="/ readonly>
+					<br />
 
-				<label for="job_type">職種:</label>
-				<input id="job_type" name="job_type" value="===JOB_TYPE==="/>
-				<br />
+					<label for="job_type">職種:</label>
+					<input id="job_type" name="job_type" value="===JOB_TYPE==="/>
+					<br />
 
-				<label for="product">担当製品:</label>
-				<input id="product" name="product" value="===PRODUCT==="/>
-				<br />				
+					<label for="product">担当製品:</label>
+					<input id="product" name="product" value="===PRODUCT==="/>
+					<br />				
 
-				<button type="submit">送信</button>
-			</form>
+					<button type="submit">送信</button>
+				</form>
+			</section>
+
+			<section id="picture-upload">
+				<form action="upload.py?tag_id====TAG_ID===" method="post" enctype="multipart/form-data">
+					<input type="file" id="environment" capture="environment" accept="image/*" name="image">
+					<br />
+
+					<button type="submit">アップロード</button>
+				</form>
+			</section>
 		</section>
-
-		<section id="picture-upload">
-			<form action="upload.py?tag_id====TAG_ID===" method="post" enctype="multipart/form-data">
-				<input type="file" id="environment" capture="environment" accept="image/*" name="image">
-				<br />
-
-				<button type="submit">アップロード</button>
-			</form>
-		</section>
-
+		
 		<section id="debug-info">
 			debug info: <br />
 			===DEBUG_INFO===

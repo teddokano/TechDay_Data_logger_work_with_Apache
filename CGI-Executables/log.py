@@ -31,8 +31,6 @@ scripts = """
 """
 # https://qiita.com/TKfumi/items/05fc0208014a83fb8079
 
-with open( page_template_path, "r" ) as f:
-	html_source 	= f.read()					
 
 class Access:
 	def __init__( self, query, time, user_name, demo_id, ip_addr ):
@@ -42,65 +40,105 @@ class Access:
 		self.demo_id	= demo_id
 		self.ip_addr	= ip_addr
 
-files		= os.listdir( access_log_folder )
-log_files	= [ f for f in files if f.endswith( ".log" ) == True ]
+def get_log_data():
+	files		= os.listdir( access_log_folder )
+	log_files	= [ f for f in files if f.endswith( ".log" ) == True ]
 
-logs		= []
+	logs		= []
 
-for f in log_files:
+	for f in log_files:
+		try:
+			print( f"loading: {f}  ", end = "" )
+			with open( access_log_folder + f, "rb" ) as file:
+				logs.append( pickle.load( file ) )
+
+		except:
+			pass
+
+
+	total_log	= pd.DataFrame()
+
+	for i in logs:	
+		d	= { "time": i.time, "user_name": i.user_name, "demo_id": i.demo_id, "ip_addr": i.ip_addr }
+		d.update( i.query )
+		
+		total_log	= pd.concat( [total_log, pd.DataFrame( d ) ] )
+
+	total_log.fillna( "", inplace = True )
+	total_log.sort_values( "time", ascending = False, inplace = True )
+	
+	return total_log
+	
+
+def get_log():
+
+	###
+	### page preparation
+	###
+	
+	with open( page_template_path, "r" ) as f:
+		html_source 	= f.read()					
+
+	
+	###
+	### get log data
+	###
+	
+	total_log	= get_log_data()
+
+
+	###
+	### check own demo_id and filter log if needed
+	###
+	
+	demo_id	= None
+		
+	cookies	= SimpleCookie()
 	try:
-		print( f"loading: {f}  ", end = "" )
-		with open( access_log_folder + f, "rb" ) as file:
-			logs.append( pickle.load( file ) )
-
+		cookies.load( os.environ[ "HTTP_COOKIE" ] )
+		demo_id	= cookies[ "demo_id" ].value
 	except:
 		pass
 
+	try:
+		query	= parse_qs( os.environ[ "QUERY_STRING" ] )
+		demo_id	= query[ "demo_id" ][0]
+		if demo_id == "all":
+			demo_id	= None
+	except:
+		pass
 
-total_log	= pd.DataFrame()
-
-for i in logs:	
-	d	= { "time": i.time, "user_name": i.user_name, "demo_id": i.demo_id, "ip_addr": i.ip_addr }
-	d.update( i.query )
-	
-	total_log	= pd.concat( [total_log, pd.DataFrame( d ) ] )
-
-total_log.fillna( "", inplace = True )
-total_log.sort_values( "time", ascending = False, inplace = True )
-
-demo_id	= None
-	
-cookies	= SimpleCookie()
-try:
-	cookies.load( os.environ[ "HTTP_COOKIE" ] )
-	demo_id	= cookies[ "demo_id" ].value
-except:
-	pass
-
-try:
-	query	= parse_qs( os.environ[ "QUERY_STRING" ] )
-	demo_id	= query[ "demo_id" ][0]
-	if demo_id == "all":
-		demo_id	= None
-except:
-	pass
-
-if demo_id is not None:
-	total_log	= total_log[ total_log[ "demo_id" ] == demo_id ]
-	demo_id	= f"filtered for {demo_id}"
-else:
-	total_log.to_excel( excel_output_file, sheet_name='new_sheet_name')
-	demo_id = "all demo_id"
+	if demo_id is not None:
+		total_log	= total_log[ total_log[ "demo_id" ] == demo_id ]
+		demo_id	= f"filtered for {demo_id}"
+	else:
+#		total_log.to_excel( excel_output_file, sheet_name='new_sheet_name')
+		total_log.to_excel( excel_output_file )
+		demo_id = "all demo_id"
 	
 	
-print( "Content-Type: text/html\n" )
-h	= html_source.replace( "===DEBUG_INFO===", demo_id )
-h	= h.replace( "===LOG_TABLE===",  scripts + total_log.to_html( classes = "my-table", index = False ) )
+	###
+	### html generation
+	###
+		
+	print( "Content-Type: text/html\n" )
+	h	= html_source.replace( "===DEBUG_INFO===", demo_id )
+	h	= h.replace( "===LOG_TABLE===",  scripts + total_log.to_html( classes = "my-table", index = False ) )
 
-if demo_id == "all demo_id":
-	h	= h.replace( "===DOWNLOAD_LINK===", '<p><a href = "/log.xlsx">Download log file</a></p>' )
-else:
-	h	= h.replace( "===DOWNLOAD_LINK===", "" )
+	if demo_id == "all demo_id":
+		h	= h.replace( "===DOWNLOAD_LINK===", '<p><a href = "/log.xlsx">Download log file</a></p>' )
+	else:
+		h	= h.replace( "===DOWNLOAD_LINK===", "" )
 
-print( h )
+	###
+	### html output
+	###
+		
+	print( h )
 
+
+def main():
+	get_log()
+	
+if __name__ == "__main__":
+	main()

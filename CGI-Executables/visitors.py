@@ -8,7 +8,7 @@ import	pickle
 from	urllib.parse import parse_qs
 from	http.cookies import SimpleCookie
 
-from log import get_log_data
+from log import	*
 
 page_template_path	= "page_template/log_page.html"
 visitors_data_file	= "data/visitors.pkl"

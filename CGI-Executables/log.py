@@ -111,8 +111,8 @@ def get_log():
 		total_log	= total_log[ total_log[ "demo_id" ] == demo_id ]
 		demo_id	= f"filtered for {demo_id}"
 	else:
-#		total_log.to_excel( excel_output_file, sheet_name='new_sheet_name')
-		total_log.to_excel( excel_output_file )
+#		total_log.to_excel( excel_output_file, sheet_name='new_sheet_name', index = False )
+		total_log.to_excel( excel_output_file, index = False )
 		demo_id = "all demo_id"
 	
 	

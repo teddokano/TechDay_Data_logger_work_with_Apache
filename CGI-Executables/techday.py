@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/Library/WebServer/CGI-Executables/venv/bin/python3
 
 import urllib.request
 import json
@@ -9,6 +9,8 @@ from http.cookies import SimpleCookie
 
 import	pickle
 import	datetime
+
+from log import	*
 
 page_template_path		= "page_template/main_page.html"
 error404_template_path	= "page_template/404.html"
@@ -94,6 +96,8 @@ def action():
 	cookies[ "demo_id"   ][ "max-age" ] = cookie_expire_seconds
 	cookies[ "user_name" ][ "max-age" ] = cookie_expire_seconds * 365
 
+	demo_visit_count	= demo_access_count( tag_id )
+
 	print( cookies.output() )
 	print( "Content-Type: text/html\n" )
 	
@@ -103,6 +107,7 @@ def action():
 	h	= h.replace( '===DEMO_ID===',    demo_id )
 	h	= h.replace( '===JOB_TYPE===',   visitor.job_type )
 	h	= h.replace( '===PRODUCT===',    visitor.product )
+	h	= h.replace( '===DEMO_COUNT===', demo_visit_count )
 
 	image_file	= f"{image_folder_access}{tag_id}.jpg"
 	
@@ -118,8 +123,9 @@ def action():
 	else:
 		h	= h.replace( '===DISPLAY_CONTROL===', "isFirstAccess" )
 	
-	h	= h.replace( '===DEBUG_INFO===', cookies.output() + "<br />" + f"{query}" + "<br />" + f"{os.environ}" + "<br />" +  f"{remote_addr}"  + "<br />" +  f"{image_file}" + "<br />" +  f"{default_image}" + "<br />" +  f"{tag_id}"  )
-
+#	h	= h.replace( '===DEBUG_INFO===', cookies.output() + "<br />" + f"{query}" + "<br />" + f"{os.environ}" + "<br />" +  f"{remote_addr}"  + "<br />" +  f"{image_file}" + "<br />" +  f"{default_image}" + "<br />" +  f"{tag_id}" )
+	pv	= demo_access_count( tag_id )
+	
 	print( h )
 	
 	try:
@@ -156,6 +162,20 @@ def demo_list( selected, length ):
 		str_list   += [ f'<option value= "{id}" {sel}>Demo {i}</option>' ]
 
 	return "\n".join( str_list )
+
+def demo_access_count( tag_id ):
+
+	log_data	= get_log_data()
+
+	log_data[ "tag_id" ].map( lambda x: int( x ) if type( x ) is float else x )
+
+	pv	= pd.pivot_table( log_data, index = "tag_id", columns = "demo_id", values = "time", aggfunc = "count" )
+	pv	= pv.apply( lambda col: col.map( lambda x: 1 if (x != float( "NaN" )) and (x > 0) else 0 ) )
+	pv.insert( 0, "total", pv.sum( axis = 1) )
+
+	demo_visit_count	= pv["total"][ tag_id ]
+
+	return	demo_visit_count.astype(str)
 
 def main():
 	action()

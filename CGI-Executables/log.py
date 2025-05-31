@@ -59,13 +59,8 @@ def get_log_data( path = access_log_folder ):
 		total_log	= pd.concat( [total_log, pd.DataFrame( d, index = [ 0 ] ) ] )
 
 	total_log.fillna( "", inplace = True )
-#	print( logs )
-#	print(  "done" )
-#	print(  total_log )
+
 	return total_log
-	
-def test( x ):
-	return x * x
 	
 
 def get_log():

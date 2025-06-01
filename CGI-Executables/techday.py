@@ -30,7 +30,6 @@ class Access:
 
 class Visitor:
 	def __init__( self, id, job = "未設定", prod = "未設定" ):
-#		self.tag_id		= id
 		self.job_type	= job
 		self.product	= prod
 		
@@ -123,8 +122,7 @@ def action():
 	else:
 		h	= h.replace( '===DISPLAY_CONTROL===', "isFirstAccess" )
 	
-#	h	= h.replace( '===DEBUG_INFO===', cookies.output() + "<br />" + f"{query}" + "<br />" + f"{os.environ}" + "<br />" +  f"{remote_addr}"  + "<br />" +  f"{image_file}" + "<br />" +  f"{default_image}" + "<br />" +  f"{tag_id}" )
-	pv	= demo_access_count( tag_id )
+	h	= h.replace( '===DEBUG_INFO===', cookies.output() + "<br />" + f"{query}" + "<br />" + f"{os.environ}" + "<br />" +  f"{remote_addr}"  + "<br />" +  f"{image_file}" + "<br />" +  f"{default_image}" + "<br />" +  f"{tag_id}" )
 	
 	print( h )
 	

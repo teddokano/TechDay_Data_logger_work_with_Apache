@@ -171,7 +171,10 @@ def demo_access_count( tag_id ):
 	pv	= pv.apply( lambda col: col.map( lambda x: 1 if (x != float( "NaN" )) and (x > 0) else 0 ) )
 	pv.insert( 0, "total", pv.sum( axis = 1) )
 
-	demo_visit_count	= pv["total"][ tag_id ]
+	try:
+		demo_visit_count	= pv["total"][ tag_id ]
+	except KeyError:
+		return "0"
 
 	return	demo_visit_count.astype(str)
 

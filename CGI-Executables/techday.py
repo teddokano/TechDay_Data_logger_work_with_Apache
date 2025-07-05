@@ -172,7 +172,7 @@ def demo_access_count( tag_id ):
 	pv.insert( 0, "total", pv.sum( axis = 1) )
 
 	try:
-		demo_visit_count	= pv["total"][ "tag_id" ]
+		demo_visit_count	= pv[ "total" ][ tag_id ]
 	except KeyError:
 		return "0"
 

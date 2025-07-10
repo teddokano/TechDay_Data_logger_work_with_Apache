@@ -1,5 +1,7 @@
 #!/Library/WebServer/CGI-Executables/venv/bin/python3
 
+series_label	= "mm"
+
 import urllib.request
 import json
 import os
@@ -29,9 +31,10 @@ class Access:
         self.ip_addr	= ip_addr
 
 class Visitor:
-	def __init__( self, id, job = "未設定", prod = "未設定" ):
+	def __init__( self, visitor_count, job = "未設定", prod = "未設定" ):
 		self.job_type	= job
 		self.product	= prod
+		self.serial		= 0
 		
 try:
 	with open( visitors_data_file, "rb" ) as f:
@@ -64,7 +67,8 @@ def action():
 	new_tag		= False
 	
 	if tag_id not in visitors.keys():
-		visitors[ tag_id ]	= Visitor( tag_id )
+		visitors[ tag_id ]			= Visitor( tag_id )
+		visitors[ tag_id ].serial	= series_label + str( len( visitors ) )
 		new_tag				= True
 
 	visitor	= visitors[ tag_id ]
@@ -106,6 +110,7 @@ def action():
 	h	= h.replace( '===DEMO_ID===',    demo_id )
 	h	= h.replace( '===JOB_TYPE===',   visitor.job_type )
 	h	= h.replace( '===PRODUCT===',    visitor.product )
+	h	= h.replace( '===SERIAL===',     visitor.serial )
 	h	= h.replace( '===DEMO_COUNT===', demo_visit_count )
 
 	image_file	= f"{image_folder_access}{tag_id}.jpg"

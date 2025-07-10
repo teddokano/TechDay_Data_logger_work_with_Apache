@@ -50,6 +50,7 @@ class Visitor:
 	def __init__( self, id, job = "未設定", prod = "未設定" ):
 		self.job_type	= job
 		self.product	= prod
+		self.serial		= 0
 
 ###
 ###	find visited demo

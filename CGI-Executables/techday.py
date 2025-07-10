@@ -60,7 +60,8 @@ def action():
 		
 	remote_addr	= os.environ[ "REMOTE_ADDR" ]
 	
-	tag_id		= cookie_and_query( "tag_id",    9999,   query, cookies )
+	tag_id		= cookie_and_query( "tag_id",      9999, query, cookies )
+	serial		= cookie_and_query( "serial",    "none", query, cookies )
 	demo_id		= cookie_and_query( "demo_id",   "none", query, cookies )
 	user_name	= cookie_and_query( "user_name", "none", query, cookies )
 	
@@ -96,6 +97,7 @@ def action():
 		
 	cookie_expire_seconds	= 3600 * 24 * 3
 	cookies[ "tag_id"    ][ "max-age" ] = cookie_expire_seconds
+	cookies[ "serial"    ][ "max-age" ] = cookie_expire_seconds
 	cookies[ "demo_id"   ][ "max-age" ] = cookie_expire_seconds
 	cookies[ "user_name" ][ "max-age" ] = cookie_expire_seconds * 365
 
@@ -185,7 +187,7 @@ def demo_access_count( tag_id ):
 	except KeyError:
 		return "0"
 
-	return	demo_visit_count.astype(str)
+	return	demo_visit_count.astype( str )
 
 def main():
 	action()

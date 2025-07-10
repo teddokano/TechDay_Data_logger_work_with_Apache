@@ -77,7 +77,7 @@ except:
 total_log	= pd.DataFrame()
 
 for k, v in visitors.items():
-	d	= { "tag_id": k, "job_type": v.job_type, "product": v.product }
+	d	= { "tag_id": k, "serial": v.serial, "job_type": v.job_type, "product": v.product }
 	total_log	= pd.concat( [total_log, pd.DataFrame( d, index = [ k ] ) ] )
 
 tags	= [ k for k in visitors.keys() ]

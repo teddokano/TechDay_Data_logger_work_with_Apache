@@ -21,14 +21,16 @@ image_folder_access		= "../Documents/img/"
 default_image			= f"{image_folder}default.png"
 visitors_data_file		= "data/visitors.pkl"
 access_log_folder		= "access_log/"
+test_page_tag_id		= "test000"
 
 class Access:
-    def __init__( self, query, time, user_name, demo_id, ip_addr ):
+    def __init__( self, query, time, user_name, demo_id, ip_addr, serial ):
         self.query		= query
         self.time		= time
         self.user_name	= user_name
         self.demo_id	= demo_id
         self.ip_addr	= ip_addr
+        self.serial		= serial
 
 class Visitor:
 	def __init__( self, visitor_count, job = "未設定", prod = "未設定" ):
@@ -69,8 +71,13 @@ def action():
 	
 	if tag_id not in visitors.keys():
 		visitors[ tag_id ]			= Visitor( tag_id )
-		visitors[ tag_id ].serial	= series_label + str( len( visitors ) )
-		new_tag				= True
+		
+		if tag_id == test_page_tag_id:
+			visitors[ tag_id ].serial	= "test"
+		else:
+			visitors[ tag_id ].serial	= series_label + str( len( visitors ) )
+	
+		new_tag						= True
 
 	visitor	= visitors[ tag_id ]
 
@@ -119,7 +126,7 @@ def action():
 	
 	if os.path.isfile( image_file ):
 		image_file	= f"{image_folder}{tag_id}.jpg"
-	else:	
+	else:
 		image_file	= default_image
 		
 	h	= h.replace( '===IMAGE_FILE===', image_file )
@@ -135,7 +142,7 @@ def action():
 	
 	try:
 		with open( access_log_folder + datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f") + "_" + user_name + "_" + demo_id + ".log", "wb" ) as f:
-			pickle.dump( Access( query, datetime.datetime.now(), user_name, demo_id, remote_addr ), f )			
+			pickle.dump( Access( query, datetime.datetime.now(), user_name, demo_id, remote_addr, visitor.serial ), f )			
 	except:
 		raise Exception( "########## access loggging error" )
 

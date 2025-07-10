@@ -50,12 +50,13 @@ scripts = """
 
 
 class Access:
-	def __init__( self, query, time, user_name, demo_id, ip_addr ):
-		self.query		= query
-		self.time		= time
-		self.user_name	= user_name
-		self.demo_id	= demo_id
-		self.ip_addr	= ip_addr
+    def __init__( self, query, time, user_name, demo_id, ip_addr, serial ):
+        self.query		= query
+        self.time		= time
+        self.user_name	= user_name
+        self.demo_id	= demo_id
+        self.ip_addr	= ip_addr
+        self.serial		= serial
 
 def get_log_data( path = access_log_folder ):
 	files		= os.listdir( path )
@@ -70,7 +71,7 @@ def get_log_data( path = access_log_folder ):
 	total_log	= pd.DataFrame()
 
 	for i in logs:	
-		d	= { "time": i.time, "user_name": i.user_name, "demo_id": i.demo_id, "ip_addr": i.ip_addr }
+		d	= { "time": i.time, "user_name": i.user_name, "demo_id": i.demo_id, "ip_addr": i.ip_addr, "serial": i.serial }
 		d.update( i.query )
 		
 		total_log	= pd.concat( [total_log, pd.DataFrame( d, index = [ 0 ] ) ] )

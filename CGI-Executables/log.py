@@ -96,7 +96,9 @@ def get_log():
 	###
 	
 	total_log	= get_log_data()
-	total_log.sort_values( "time", ascending = False, inplace = True )
+	
+	if ( any( total_log ) ):
+		total_log.sort_values( "time", ascending = False, inplace = True )
 
 
 	###

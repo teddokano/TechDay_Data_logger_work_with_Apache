@@ -243,6 +243,16 @@
 		</section>
 
 		<section id="visitor-info">
+			
+			<section id="picture-upload">
+				<form action="upload.py?tag_id====TAG_ID===" method="post" enctype="multipart/form-data">
+					<input type="file" id="environment" capture="environment" accept="image/*" name="image">
+					<br />
+
+					<button type="submit">アップロード</button>
+				</form>
+			</section>
+			
 			<section id="visitor-info-basic">
 				<form id="tag-update">
 					<label for="tag_id">Tag ID:</label>
@@ -261,14 +271,6 @@
 				</form>
 			</section>
 
-			<section id="picture-upload">
-				<form action="upload.py?tag_id====TAG_ID===" method="post" enctype="multipart/form-data">
-					<input type="file" id="environment" capture="environment" accept="image/*" name="image">
-					<br />
-
-					<button type="submit">アップロード</button>
-				</form>
-			</section>
 		</section>
 		
 		<section id="debug-info">

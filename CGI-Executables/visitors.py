@@ -58,11 +58,12 @@ class Visitor:
 
 log_data	= get_log_data()
 
-log_data[ "tag_id" ].map( lambda x: int( x ) if type( x ) is float else x )
+if ( any( log_data ) ):
+	log_data[ "tag_id" ].map( lambda x: int( x ) if type( x ) is float else x )
 
-pv	= pd.pivot_table( log_data, index = "tag_id", columns = "demo_id", values = "time", aggfunc = "count" )
-pv	= pv.apply( lambda col: col.map( lambda x: 1 if (x != float( "NaN" )) and (x > 0) else 0 ) )
-pv.insert( 0, "total", pv.sum( axis = 1) )
+	pv	= pd.pivot_table( log_data, index = "tag_id", columns = "demo_id", values = "time", aggfunc = "count" )
+	pv	= pv.apply( lambda col: col.map( lambda x: 1 if (x != float( "NaN" )) and (x > 0) else 0 ) )
+	pv.insert( 0, "total", pv.sum( axis = 1) )
 
 ###
 ### load visitor info
@@ -76,18 +77,21 @@ except:
 
 total_log	= pd.DataFrame()
 
-for k, v in visitors.items():
-	d	= { "tag_id": k, "serial": v.serial, "job_type": v.job_type, "product": v.product }
-	total_log	= pd.concat( [total_log, pd.DataFrame( d, index = [ k ] ) ] )
+if ( any( visitors ) ):
+	for k, v in visitors.items():
+		d	= { "tag_id": k, "serial": v.serial, "job_type": v.job_type, "product": v.product }
+		total_log	= pd.concat( [total_log, pd.DataFrame( d, index = [ k ] ) ] )
 
-tags	= [ k for k in visitors.keys() ]
+	tags	= [ k for k in visitors.keys() ]
 
-total_log	= total_log.join( pv )
-total_log.fillna( "", inplace = True )
-total_log = total_log.apply( lambda col: col.map( lambda x: int( x ) if type( x ) is float else x ) )
+	total_log	= total_log.join( pv )
+	total_log.fillna( "", inplace = True )
+	total_log = total_log.apply( lambda col: col.map( lambda x: int( x ) if type( x ) is float else x ) )
 
 
-total_log.sort_values( "tag_id", ascending = False, inplace = True )
+	total_log.sort_values( "tag_id", ascending = False, inplace = True )
+else:
+	tags	= []
 
 total_log.to_excel( excel_output_file, sheet_name='new_sheet_name')
 demo_id	= ""

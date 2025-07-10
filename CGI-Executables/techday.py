@@ -83,7 +83,7 @@ def action():
 	except:
 		pass
 		
-	if 	visitor_update:
+	if 	new_tag or visitor_update:
 		try:
 			with open( visitors_data_file, "wb" ) as f:
 				pickle.dump( visitors, f )
@@ -122,7 +122,7 @@ def action():
 	else:
 		h	= h.replace( '===DISPLAY_CONTROL===', "isFirstAccess" )
 	
-	h	= h.replace( '===DEBUG_INFO===', cookies.output() + "<br />" + f"{query}" + "<br />" + f"{os.environ}" + "<br />" +  f"{remote_addr}"  + "<br />" +  f"{image_file}" + "<br />" +  f"{default_image}" + "<br />" +  f"{tag_id}" )
+	h	= h.replace( '===DEBUG_INFO===', cookies.output() + "<br />" + f"{query}" + "<br />" + f"{os.environ}" + "<br />" +  f"{remote_addr}"  + "<br />" +  f"{image_file}" + "<br />" +  f"{default_image}" + "<br />" +  f"{tag_id}" + "<br />" + f"visitor_update={visitor_update}" )
 	
 	print( h )
 	

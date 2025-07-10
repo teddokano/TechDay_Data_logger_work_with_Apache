@@ -12,6 +12,7 @@ def main():
 	commands	+= [ f"rm -f ./Documents/img/*" ]
 	commands	+= [ f"cp ./Documents/default_img/default.png ./Documents/img/default.png" ]
 	commands	+= [ f"cp ./Documents/default_img/test000.jpg ./Documents/img/test000.jpg" ]
+	commands	+= [ f"chmod 444 ./Documents/img/test000.jpg" ]
 
 	comm_exec( commands, not args.no_exec )
 

@@ -4,8 +4,7 @@ import urllib.request
 import json
 import os
 from urllib.parse import urlparse
-from urllib.parse import parse_qs
-from urllib.parse import quote_plus, unquote_plus
+from urllib.parse import parse_qs, quote_plus, unquote_plus
 from http.cookies import SimpleCookie
 
 import	pickle
@@ -136,7 +135,7 @@ def action():
 def cookie_and_query( key, default_value, q, c ):
 	try:
 		rv	= c[ key ].value
-		rv	= unquote_plus( rv )
+		rv	= unquote_plus( rv )	#	to handle multibyte-characters
 	except:
 		rv	= None
 	
@@ -145,7 +144,7 @@ def cookie_and_query( key, default_value, q, c ):
 	except:
 		rv	= rv if rv else default_value
 	
-	c[ key ]	= quote_plus( rv )
+	c[ key ]	= quote_plus( rv )	#	to handle multibyte-characters
 
 	return rv
 

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechDay Data Logger</title>
+	<link href="/styles/techday.css" rel="stylesheet" />
+    <style>
+		table {
+			margin: 5px 0;
+			border-collapse: separate; /* セル間にスペースを確保する */
+			border-spacing: 10px;      /* 各セルの間に 10px のスペースを追加 */
+		}
+		
+		table td {
+			vertical-align: top;
+		}
+	</style>	
+</head>
+<body>
+    <header>
+        <h4>TechDay Data Logger</h4>
+    </header>
+    <main>
+		<section id="links">
+			links: <br />
+			<a href="cgi-bin/techday.py?tag_id=9999">メインページ</a><br />
+			<a href="/cgi-bin/log.py?demo_id=all">ログ</a><br />
+			<a href="/cgi-bin/visitors.py">訪問者データ</a><br />
+			
+        </section>
+	</main>
+	<!--
+	<footer>
+        &copy; Tsukimidai Communications Syndicate 2025
+    </footer>
+	-->
+</body>
+</html>
+

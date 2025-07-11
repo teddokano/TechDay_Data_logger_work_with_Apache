@@ -1,6 +1,8 @@
 #!/Library/WebServer/CGI-Executables/venv/bin/python3
 
 series_label	= "mm"
+demo_name_list	= "./page_template/demo_list.txt"
+
 
 import urllib.request
 import json
@@ -114,7 +116,8 @@ def action():
 	print( "Content-Type: text/html\n" )
 	
 	h	= html_source.replace( '===TAG_ID===', str( tag_id ) )
-	h	= h.replace( '===DEMO_LIST===',  demo_list( demo_id, 30 ) )
+#	h	= h.replace( '===DEMO_LIST===',  demo_list( demo_id, 30 ) )
+	h	= h.replace( '===DEMO_LIST===',  demo_list_from_file( demo_id, demo_name_list ) )
 	h	= h.replace( '===USER_NAME===',  user_name )
 	h	= h.replace( '===DEMO_ID===',    demo_id )
 	h	= h.replace( '===JOB_TYPE===',   visitor.job_type )
@@ -173,6 +176,23 @@ def demo_list( selected, length ):
 			sel	= ""
     		
 		str_list   += [ f'<option value= "{id}" {sel}>Demo {i}</option>' ]
+
+	return "\n".join( str_list )
+
+def demo_list_from_file( selected, file ):
+	with open( file, encoding='utf-8' ) as f:
+		demo_names	= [ f"demo{i}: {line.strip()}" for i, line in enumerate( f, start = 1 ) ]
+
+	str_list    = []
+	
+	for i in range( 0, len( demo_names ) ):
+		id	= f"demo{i + 1}"
+		if selected == id:
+			sel	= "selected"
+		else:
+			sel	= ""
+    		
+		str_list   += [ f'<option value= "{id}" {sel}>{demo_names[ i ]}</option>' ]
 
 	return "\n".join( str_list )
 

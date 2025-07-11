@@ -64,25 +64,21 @@ def action():
 		
 	remote_addr	= os.environ[ "REMOTE_ADDR" ]
 	
-	tag_id		= cookie_and_query( "tag_id",      9999, query, cookies )
+	tag_id		= cookie_and_query( "tag_id", "test000", query, cookies )
 	serial		= cookie_and_query( "serial",    "none", query, cookies )
 	demo_id		= cookie_and_query( "demo_id",   "none", query, cookies )
 	user_name	= cookie_and_query( "user_name", "none", query, cookies )
 	
-	new_tag		= False
+	new_tag	= False
 	
 	if tag_id not in visitors.keys():
 		visitors[ tag_id ]			= Visitor( tag_id )
-		
-		if tag_id == test_page_tag_id:
-			visitors[ tag_id ].serial	= "test"
-		else:
-			visitors[ tag_id ].serial	= series_label + str( len( visitors ) )
-	
+		visitors[ tag_id ].serial	= series_label + str( len( visitors ) - 1 )	#	count start from 0, expecting to handle an ID for test
 		new_tag						= True
 
 	visitor	= visitors[ tag_id ]
-
+	v_count	= len( visitors ) - 1	#	"-1" to exclude ID for test
+	
 	visitor_update	= False
 
 	try:
@@ -124,6 +120,7 @@ def action():
 	h	= h.replace( '===PRODUCT===',    visitor.product )
 	h	= h.replace( '===SERIAL===',     visitor.serial )
 	h	= h.replace( '===DEMO_COUNT===', demo_visit_count )
+	h	= h.replace( '===VSTR_COUNT===', str( v_count ) )
 
 	image_file	= f"{image_folder_access}{tag_id}.jpg"
 	

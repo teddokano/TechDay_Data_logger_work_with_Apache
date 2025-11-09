@@ -3,6 +3,8 @@
 series_label	= "mm"
 demo_name_list	= "./page_template/demo_list.txt"
 
+id_valid_duration		= 3600 * 10
+name_valid_duration		= 3600 * 24 * 365
 
 import urllib.request
 import json
@@ -100,11 +102,10 @@ def action():
 		except:
 			raise Exception( "########## vistors data saving error" )
 		
-	cookie_expire_seconds	= 3600 * 24 * 3
-	cookies[ "tag_id"    ][ "max-age" ] = cookie_expire_seconds
-	cookies[ "serial"    ][ "max-age" ] = cookie_expire_seconds
-	cookies[ "demo_id"   ][ "max-age" ] = cookie_expire_seconds
-	cookies[ "user_name" ][ "max-age" ] = cookie_expire_seconds * 365
+	cookies[ "tag_id"    ][ "max-age" ] = id_valid_duration
+	cookies[ "serial"    ][ "max-age" ] = id_valid_duration
+	cookies[ "demo_id"   ][ "max-age" ] = id_valid_duration
+	cookies[ "user_name" ][ "max-age" ] = name_valid_duration
 
 	demo_visit_count	= demo_access_count( tag_id )
 

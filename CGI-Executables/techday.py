@@ -110,8 +110,10 @@ def action():
 	demo_visit_count	= demo_access_count( tag_id )
 
 	print( cookies.output() )
-	print( "Content-Type: text/html\n" )
-	
+	print( "Content-Type: text/html" )
+	print( "Cache-Control: no-cache, no-store, max-age=0, must-revalidate" )
+	print()
+
 	h	= html_source.replace( '===TAG_ID===', str( tag_id ) )
 #	h	= h.replace( '===DEMO_LIST===',  demo_list( demo_id, 30 ) )
 	h	= h.replace( '===DEMO_LIST===',  demo_list_from_file( demo_id, demo_name_list ) )

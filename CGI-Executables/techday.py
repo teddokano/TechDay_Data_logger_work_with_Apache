@@ -1,6 +1,6 @@
 #!/Library/WebServer/CGI-Executables/venv/bin/python3
 
-series_label	= "mm"
+series_label	= "auto"
 demo_name_list	= "./page_template/demo_list.txt"
 
 id_valid_duration		= 3600 * 10
